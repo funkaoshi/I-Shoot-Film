@@ -4,6 +4,7 @@
     %meta(charset='utf-8')
     %title I Shoot Film
     %link(rel='stylesheet' href='/site.css' type='text/css' media='screen' title='default style sheet')
+    %meta(name='viewport' content='width=680px')
   %body
     %header
       %h1 I Shoot Film
@@ -26,4 +27,12 @@
             %img{:src => photo.url_sq}
     %footer
       %p Site designed and built by <a href="http://funkaoshi.com">Ramanan Sivaranjan</a>.
-  = haml(:_analytics, :layout => false)
+    - if @@analytics_token
+      :javascript
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+      :javascript
+        try {
+          var pageTracker = _gat._getTracker("#{@@analytics_token}");
+          pageTracker._trackPageview();
+        } catch(err) {}
