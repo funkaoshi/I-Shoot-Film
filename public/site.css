@@ -1,0 +1,8 @@
+body { font-family: Calibri, Lucdia Grande, Gill Sans, Verdana; font-size: 75%; margin:50px auto; width:640px; }
+h2 { margin-top:30px; }
+h3 { padding:0; margin:20px 0 0 0; }
+header h1, header h2 { padding:0; margin:0 10px 0 0; display:inline; }
+header h2, h3, footer { color:gray; }
+header p { border-left: 1px solid black; padding:0 200px 0 10px; }
+footer, .small { font-size:50%; }
+a { color:#888; }

@@ -1,0 +1,29 @@
+!!! 5
+%html
+  %head
+    %meta(charset='utf-8')
+    %title I Shoot Film
+    %link(rel='stylesheet' href='/site.css' type='text/css' media='screen' title='default style sheet')
+  %body
+    %header
+      %h1 I Shoot Film
+      %h2 Some rolls are better than others.
+      %p I started tracking the rolls of film I shot more methodically at the start of 2008. I assigned each roll of film a number, each frame a numerical id. These are (almost) all the photos I've shot on film and <a href="http://flickr.com/photos/funkaoshi">posted to Flickr</a> since switching to this system. The <a href="http://www.flickr.com/photos/funkaoshi/sets/72157611013506478/">B&W I processed myself</a> is a complete listing, the colour not so much. Eventually I'll go back through all my pictures and tag them properly so they show up here. Film comes in rolls of 24 or 36 frames. That should give you a sense of just how many pictures don't get posted online.
+    - @colour_film_rolls.each do |roll|
+      .roll
+        %h3= "Roll #{roll[0]}"
+        - roll[1].each do |photo|
+          %a{:href => FlickRaw::url_photopage(photo)}
+            %img{:src => photo.url_sq}          
+    %h2 Black & White Film Processed by Me
+    - @bw_film_rolls.each do |roll|
+      .roll
+        %h3
+          = "Roll #{roll[0]}"
+          = get_film_dev_info(roll[1].first)
+        - roll[1].each do |photo|
+          %a{:href => FlickRaw::url_photopage(photo)}
+            %img{:src => photo.url_sq}
+    %footer
+      %p Site designed and built by <a href="http://funkaoshi.com">Ramanan Sivaranjan</a>.
+  = haml(:_analytics, :layout => false)
