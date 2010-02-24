@@ -2,6 +2,37 @@ require 'sinatra'
 require 'flickraw'
 require 'haml'
 
+###
+
+class FlickRaw::Response
+  # Add helper method to print link from thumbnail to photo page.
+  def thumbnail_link
+    "<a href='#{FlickRaw::url_photopage(self)}'><img src=#{self.url_sq}></a>"
+  end
+end
+
+# Stores basic information about a film roll.
+class FilmRoll
+  attr_accessor :title, :roll_no, :images
+  
+  def initialize(roll_no)
+    @roll_no = roll_no
+    @title = "Roll #{roll_no}"
+    @images = []
+    @film_dev_info = nil
+  end
+  
+  def add(photo)
+    @images << photo
+  end
+  
+  # For B&W images with a recipe, we will save a link to the recipe on filmdev.org
+  def film_dev_info()
+    return @film_dev_info unless @film_dev_info.nil?
+    @film_dev_info = @images.first.machine_tags =~ /filmdev:recipe=([0-9]+)/ ? "<span class='small'><a href='http://filmdev.org/recipe/show/#{$~[1]}'>development receipe #{$~[1]}</a></span>" : ""
+  end
+end
+
 # Sinatra !!
 
 configure do
@@ -42,18 +73,12 @@ helpers do
       roll_no = photo.machine_tags.match(/funkaoshi:roll=([0-9]*)/)[1].to_i
       roll_map = photo.tags.match(/byobw/) ? bw_film_rolls : colour_film_rolls
       if !roll_map.has_key?(roll_no)
-        roll_map[roll_no] = []
+        roll_map[roll_no] = FilmRoll.new(roll_no)
       end
-      roll_map[roll_no] << photo
+      roll_map[roll_no].add(photo)
     end
-    @bw_film_rolls = bw_film_rolls.to_a.sort
-    @colour_film_rolls = colour_film_rolls.to_a.sort
-  end
-  
-  def get_film_dev_info(photo)
-    if photo.machine_tags =~ /filmdev:recipe=([0-9]+)/
-      "<span class='small'><a href='http://filmdev.org/recipe/show/#{$~[1]}'>development receipe #{$~[1]}</a></span>"
-    end
+    @bw_film_rolls = bw_film_rolls.sort
+    @colour_film_rolls = colour_film_rolls.sort
   end
 end
 

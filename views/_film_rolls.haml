@@ -1,0 +1,7 @@
+- film_rolls.each do |roll_no, roll|
+  .roll
+    %h3
+      = roll.title
+      = roll.film_dev_info
+    - roll.images.each do |photo|
+      = photo.thumbnail_link
